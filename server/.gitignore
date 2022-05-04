@@ -1,0 +1,14 @@
+# Dependencies
+node_modules/
+
+# Coverage
+coverage/
+
+# Build
+target/
+
+# Dev Database
+prisma/dev.db
+
+# Env Variables
+.env
