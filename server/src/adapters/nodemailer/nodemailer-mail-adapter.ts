@@ -9,8 +9,8 @@ class NodemailerMailAdapter implements MailAdapter {
             host: "smtp.mailtrap.io",
             port: 2525,
             auth: {
-                user: "cc4f3f5b39e93d",
-                pass: "989a8962ba5b24"
+                user: "",
+                pass: ""
             }
         })
     }
