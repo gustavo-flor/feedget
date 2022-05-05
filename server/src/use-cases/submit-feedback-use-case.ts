@@ -31,12 +31,16 @@ class SubmitFeedbackUseCase {
         if (screenshot && !screenshot.startsWith('data:image/png;base64')) {
             throw new Error('Invalid screenshot format.')
         }
+        const image = screenshot 
+            ? `<img src="${screenshot}" />`
+            : ''
         await this.mailAdapter.sendMail({
             subject: 'Novo feedback!',
             body: [
                 `<div style="font-family: sans-serif; font-size: 1rem; color: #111;">`,
                 `   <p>Tipo: ${type}</p>`,
                 `   <p>Comentário: ${comment}</p>`,
+                `   ${image}`,
                 `<div>`
             ].join('\n')
         })
