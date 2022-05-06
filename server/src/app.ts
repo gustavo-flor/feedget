@@ -3,7 +3,7 @@ import cors from 'cors'
 
 import routes from './routes'
 
-const port = 3333;
+const port = process.env.PORT || 3333;
 const api = express()
 
 api.use(cors())
