@@ -1,7 +1,9 @@
 import { ArrowLeft } from 'phosphor-react'
 import { FormEvent, useState } from 'react'
 import { FeedbackType, feedbackTypes } from '..'
+import { api } from '../../../lib/api'
 import CloseButton from '../../CloseButton'
+import Spinner from '../../Spinner'
 import ScreenshotButton from '../ScreenshotButton'
 
 interface Props {
@@ -17,11 +19,21 @@ const FeedbackContentStep = ({
 }: Props) => {
     const [comment, setComment] = useState('')
     const [screenshot, setScreenshot] = useState<string | null>(null)
+    const [isSendingFeedback, setIsSendingFeedback] = useState(false);
     const feedbackTypeInfo = feedbackTypes[feedbackType]
 
-    const handleSubmitFeedback = (event: FormEvent) => {
+    const handleSubmitFeedback = async (event: FormEvent) => {
         event.preventDefault()
-        console.log(screenshot, comment)
+        if (isSendingFeedback || comment.trim().length === 0) {
+            return;
+        }
+        setIsSendingFeedback(true)
+        await api.post('/feedbacks', {
+            type: feedbackType,
+            comment,
+            screenshot
+        })
+        setIsSendingFeedback(false)
         onFeedbackSent()
     }
 
@@ -51,9 +63,9 @@ const FeedbackContentStep = ({
                 <button
                     type="submit"
                     className="p-2 bg-brand-500 rounded-md border-transparent flex-1 flex justify-center items-center text-sm hover:bg-brand-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-zinc-900 focus:ring-brand-500 transition-colors disabled:opacity-50 disabled:hover:bg-brand-500"
-                    disabled={comment.trim().length === 0}
+                    disabled={comment.trim().length === 0 || isSendingFeedback}
                 >
-                    Enviar feedback
+                    {isSendingFeedback ? <Spinner /> : 'Enviar feedback'}
                 </button>
             </footer>
         </form>
